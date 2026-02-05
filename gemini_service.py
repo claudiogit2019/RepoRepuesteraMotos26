@@ -1,11 +1,10 @@
 import os
 from groq import Groq
-from dotenv import load_dotenv  
 
-load_dotenv()  
 
 api_key = os.getenv("GROQ_API_KEY")
 client = Groq(api_key=api_key)
+
 def transcribir_audio_fluido(archivo_audio):
     try:
         with open(archivo_audio, "rb") as audio:
@@ -15,7 +14,8 @@ def transcribir_audio_fluido(archivo_audio):
                 response_format="text",
                 language="es"
             )
-    except Exception as e: return f"Error: {str(e)}"
+    except Exception as e: 
+        return f"Error en transcripción: {str(e)}"
 
 def procesar_pedido_con_ia(pedido, inventario_contexto):
     try:
@@ -27,6 +27,7 @@ def procesar_pedido_con_ia(pedido, inventario_contexto):
                     "content": f"""Eres el experto en repuestos de 'MotoRepuestos'. 
                     INVENTARIO DISPONIBLE: {inventario_contexto}.
                     TAREA: Responde ÚNICAMENTE con este formato por línea: PRODUCTO | CANTIDAD | SUBTOTAL_CALCULADO
+                    No saludes ni agregues texto extra.
                     Ejemplo: Piñón 14T | 1 | 15000"""
                 },
                 {"role": "user", "content": pedido}
@@ -34,4 +35,5 @@ def procesar_pedido_con_ia(pedido, inventario_contexto):
             temperature=0.1
         )
         return completion.choices[0].message.content
-    except Exception as e: return f"Error: {str(e)}"
+    except Exception as e: 
+        return f"Error en IA: {str(e)}"

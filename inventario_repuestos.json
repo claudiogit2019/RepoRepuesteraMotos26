@@ -1,0 +1,56 @@
+{
+    "Sucursal Centro": [
+        {
+            "Producto": "Kit Transmisión Honda CB 250",
+            "Precio": 45000.0,
+            "Stock": 10.0,
+            "Rubro": "Transmisión"
+        },
+        {
+            "Producto": "Aceite Motul 7100 4T",
+            "Precio": 18500.0,
+            "Stock": 21.0,
+            "Rubro": "Lubricantes"
+        },
+        {
+            "Producto": "Bateria Yuasa YTX7L",
+            "Precio": 62000.0,
+            "Stock": 0.0,
+            "Rubro": "Electricidad"
+        },
+        {
+            "Producto": "Casco MODELO f",
+            "Precio": 30000.0,
+            "Stock": 15.0,
+            "Rubro": "General"
+        },
+        {
+            "Producto": "freno T",
+            "Precio": 12000.0,
+            "Stock": 9.0,
+            "Rubro": "Gral"
+        }
+    ],
+    "Sucursal Norte": [
+        {
+            "Producto": "Cubierta Pirelli 110/70-17",
+            "Precio": 95000.0,
+            "Stock": 7.0,
+            "Rubro": "Neumáticos"
+        },
+        {
+            "Producto": "Pastillas Freno EBC",
+            "Precio": 12000.0,
+            "Stock": 15.0,
+            "Rubro": "Frenos"
+        }
+    ],
+    "Sucursal Sur": [
+        {
+            "Producto": "Filtro Aire original Yamaha",
+            "Precio": 8500.0,
+            "Stock": 12.0,
+            "Rubro": "Repuestos"
+        }
+    ]
+}

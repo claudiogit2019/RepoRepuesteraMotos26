@@ -1,0 +1,9 @@
+streamlit
+pandas
+fpdf2
+xlsxwriter
+streamlit-mic-recorder
+google-generativeai
+python-dotenv
+groq
+openpyxl

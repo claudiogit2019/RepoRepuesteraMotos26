@@ -97,6 +97,7 @@ if st.session_state.rol == "admin":
     tab1, tab2 = st.tabs(["📈 VISTA GENERAL", "⚙️ GESTIÓN MAESTRA"])
     
     with tab1:
+        st.subheader("📊 RESUMEN GLOBAL DE STOCK")
         lista_global = []
         for suc, items in st.session_state.db_total.items():
             for i in items:
@@ -201,7 +202,39 @@ else:
 
     with tabs[1]:
         st.subheader("📦 GESTIÓN DE INVENTARIO LOCAL")
-        df_edit = st.data_editor(pd.DataFrame(inv_local), use_container_width=True)
-        if st.button("💾 GUARDAR CAMBIOS DE STOCK"):
+        
+        # --- BORRADO INDIVIDUAL ---
+        st.markdown("### 🗑️ Eliminar Producto")
+        c_del1, c_del2 = st.columns([3, 1])
+        prod_del = c_del1.selectbox("Elegir producto para borrar:", [""] + [p['Producto'] for p in inv_local], key="borrar_loc")
+        if c_del2.button("ELIMINAR", use_container_width=True) and prod_del:
+            st.session_state.db_total[st.session_state.sucursal_activa] = [p for p in inv_local if p['Producto'] != prod_del]
+            guardar_datos(st.session_state.db_total)
+            st.rerun()
+
+        st.divider()
+
+        # --- TABLA Y EXCEL ---
+        df_inv = pd.DataFrame(inv_local)
+        df_edit = st.data_editor(df_inv, use_container_width=True, num_rows="dynamic")
+        
+        col_btn1, col_btn2 = st.columns(2)
+        if col_btn1.button("💾 GUARDAR TABLA", use_container_width=True):
             st.session_state.db_total[st.session_state.sucursal_activa] = df_edit.to_dict(orient='records')
-            guardar_datos(st.session_state.db_total); st.success("Inventario actualizado"); st.rerun()
+            guardar_datos(st.session_state.db_total); st.success("Guardado"); st.rerun()
+
+        # Exportar Excel
+        buf = io.BytesIO()
+        with pd.ExcelWriter(buf, engine='xlsxwriter') as writer:
+            df_inv.to_excel(writer, index=False, sheet_name='Stock')
+        col_btn2.download_button("📥 DESCARGAR EXCEL", data=buf.getvalue(), file_name="inventario.xlsx", use_container_width=True)
+
+        st.divider()
+        st.write("### 🚀 Carga Masiva (Excel)")
+        file_up = st.file_uploader("Subir archivo .xlsx para reemplazar stock:", type=["xlsx"])
+        if file_up:
+            df_new = pd.read_excel(file_up)
+            if st.button("REEMPLAZAR TODO CON ESTE EXCEL"):
+                st.session_state.db_total[st.session_state.sucursal_activa] = df_new.to_dict(orient='records')
+                guardar_datos(st.session_state.db_total); st.rerun()
+
